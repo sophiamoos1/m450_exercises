@@ -1,0 +1,143 @@
+{
+	"info": {
+		"_postman_id": "1fd3bd92-b171-4822-9f2b-feb138d9ff39",
+		"name": "modul450-competenz3-aufgabe1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "20074888"
+	},
+	"item": [
+		{
+			"name": "Get All students",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body matches string\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Jonas\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/students"
+			},
+			"response": []
+		},
+		{
+			"name": "create new student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"pm.collectionVariables.set(\"name\", jsonData.name);\r",
+							"pm.collectionVariables.set(\"email\", jsonData.email);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"email\": \"{{$randomEmail}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8081/students"
+			},
+			"response": []
+		},
+		{
+			"name": "Test if student was created",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Validate last object in response against saved 'email' value\", function () {\r",
+							"    var savedEmail = pm.collectionVariables.get(\"email\");\r",
+							"    var responseBody = pm.response.json();\r",
+							"    var lastObject = responseBody[responseBody.length - 1];\r",
+							"    var responseEmail = lastObject.email;\r",
+							"    pm.expect(responseEmail).to.equal(savedEmail);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validate last object in response against saved 'name' value\", function () {\r",
+							"    var savedName = pm.collectionVariables.get(\"name\");\r",
+							"    var responseBody = pm.response.json();\r",
+							"    var lastObject = responseBody[responseBody.length - 1];\r",
+							"    var responseName = lastObject.name;\r",
+							"    pm.expect(responseName).to.equal(savedName);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8081/students"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "name",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
